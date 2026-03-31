@@ -1,46 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>
-  // 🔐 доступ только по этим ссылкам
-  const allowedPaths = [
-    "/client-autodoc-2026",
-    "/client-demo",
-    "/client-bea"
-  ];
-
-  const currentPath = window.location.pathname;
-
-  if (!allowedPaths.includes(currentPath)) {
-    document.write(`
-      <html>
-      <head>
-        <title>Private Access</title>
-      </head>
-      <body style="
-        margin:0;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        height:100vh;
-        font-family:Arial, sans-serif;
-        background:#f9f8f7;
-      ">
-        <div style="
-          text-align:center;
-          background:white;
-          padding:50px;
-          border-radius:20px;
-          box-shadow:0 20px 60px rgba(0,0,0,0.15);
-        ">
-          <h2 style="margin-bottom:10px;">🔒 Private access</h2>
-          <p style="color:#666;">This page is available via a private link only</p>
-        </div>
-      </body>
-      </html>
-    `);
-  }
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Autodoc · Find Your Group</title>
