@@ -585,42 +585,6 @@ function go(step){
 
 const FORMSPREE = 'https://formspree.io/f/xreanyae';
 
-function openApply(g){
-  window._currentGroup = g;
-  const isFull = g.n >= 8;
-  document.getElementById('modalContent').innerHTML = `
-    <div class="modal-head">
-      <div class="modal-title">${isFull ? '📋 Join Waitlist' : '✅ Apply for Group'}</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-info">
-      <div class="modal-info-row">🏷️ <b>${g.id}</b> &nbsp;·&nbsp; ${g.level}</div>
-      <div class="modal-info-row">👩‍🏫 <b>${g.teacher}</b></div>
-      <div class="modal-info-row">📅 ${g.s}</div>
-      <div class="modal-info-row">🗓️ Started ${g.start} &nbsp;·&nbsp; ${g.n}/8 enrolled</div>
-    </div>
-    <div class="mform-group">
-      <label class="mform-label">Your name</label>
-      <input class="mform-input" id="mName" type="text" placeholder="First and last name" required>
-    </div>
-    <div class="mform-group">
-      <label class="mform-label">Corporate email</label>
-      <input class="mform-input" id="mEmail" type="email" placeholder="name@autodoc.de" required>
-    </div>
-    <div class="mform-group">
-      <a href="https://confluence.autodoc.de/display/PEOP/Language+Request+Guide" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--red);text-decoration:none;margin-bottom:8px;border-bottom:1px dashed var(--red-mid);padding-bottom:1px;">
-        🎫 Create a Jira ticket to join!
-      </a>
-      <label class="mform-label">Jira ticket</label>
-      <input class="mform-input" id="mJira" type="text" placeholder="e.g. LR-1034" required>
-    </div>
-    <button class="modal-submit" onclick="submitForm('group')">
-      ${isFull ? 'Join Waitlist' : 'Send Application'} →
-    </button>
-  `;
-  document.getElementById('applyModal').classList.add('open');
-  document.body.style.overflow='hidden';
-}
 
 function openWaitlist(){
   document.getElementById('modalContent').innerHTML = `
