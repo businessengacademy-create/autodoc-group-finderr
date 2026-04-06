@@ -87,7 +87,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .bcsep{color:var(--border2)}
 
 /* LEVEL GRID */
-.lvl-hint{font-size:14px;color:var(--muted);margin-bottom:20px;font-style:italic;font-family:'Fraunces',serif;font-weight:300}
+.lvl-hint{font-size:13px;color:#1e40af;margin-bottom:20px;font-weight:500;background:#eff6ff;border:1.5px solid #bfdbfe;border-left:4px solid #3b82f6;border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:8px}
+.lvl-hint a{color:#1d4ed8;font-weight:600;text-decoration:none;border-bottom:1px dashed #93c5fd}
+.lvl-hint a:hover{border-bottom-color:#1d4ed8}
 .level-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .lall{width:100%;background:var(--bg2);border:1.5px dashed var(--border2);border-radius:14px;padding:16px 22px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:14px;transition:all .22s;box-shadow:0 1px 3px rgba(0,0,0,.03);text-align:center}
 .lall:hover{border-color:var(--red);border-style:solid;background:var(--red-soft)}
@@ -279,6 +281,13 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 #lockBox h2{color:var(--red);font-size:26px;font-weight:700;margin-bottom:12px;font-family:'Montserrat',sans-serif}
 #lockBox p{color:#888;font-size:14px;line-height:1.6}
 #lockBox .badge{display:inline-block;background:#fff4ee;border:2px solid #ffd4b0;color:var(--red);font-size:13px;font-weight:700;border-radius:8px;padding:6px 14px;margin-top:20px;letter-spacing:.5px}
+
+.local-lingua-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;background:#f0fdf4;border:1px solid #86efac;color:#15803d;padding:3px 10px;border-radius:20px;margin-left:6px;vertical-align:middle}
+.ll-tag{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:11px;color:#15803d;font-weight:500}
+
+.gc-copy{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:7px 14px;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;font-family:inherit;width:100%;justify-content:center}
+.gc-copy:hover{border-color:var(--red);color:var(--red);background:var(--red-soft)}
+.gc-copy.copied{border-color:var(--green);color:var(--green);background:#f0fdf4}
 </style>
 </head>
 <body>
@@ -305,7 +314,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <p>Browse active study groups, check availability, and find the perfect schedule.</p>
   <div class="hero-step4">
     <div class="hs4-icon">💬</div>
-    <div class="hs4-text" id="hs4t"><strong>Found your group?</strong> Copy the group name and send your choice to <span id="em1"></span> or <strong>@Daria Kalinina</strong> in Slack.</div>
+    <div class="hs4-text" id="hs4t"><strong>Found your group?</strong> Copy the group name and <a href="https://confluence.autodoc.de/display/PEOP/Language+Request+Guide" target="_blank" rel="noopener">create a Jira ticket ↗</a>. For support, contact <strong>@Dmytro Chylikin</strong> via Slack.</div>
   </div>
 </div>
 
@@ -320,7 +329,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <div class="crumb" id="bc2"></div>
     </div>
     <div class="slabel">Choose your level</div>
-    <p class="lvl-hint">Not sure? Pick the level closest to your current ability. <span id="test-link"></span></p>
+    <p class="lvl-hint">💡 Not sure about your level? Pick the closest to your current ability. <span id="test-link"></span></p>
     <div class="level-grid" id="level-grid"></div>
   </div>
   <div class="panel" id="p3">
@@ -440,7 +449,9 @@ const ini=n=>n.split(' ').map(w=>w[0]).slice(0,1).join('').toUpperCase();
   [...new Set(DATA.map(x=>x.lang))].forEach(lang=>{
     const all=DATA.filter(x=>x.lang===lang),op=all.filter(x=>!full(x)).length;
     const d=document.createElement('div');d.className='lcard';
-    d.innerHTML=`<div class="lcard-bg">${FL[lang]}</div><div class="lf">${FL[lang]}</div><div class="ln">${lang}</div><div class="lmeta"><div class="ltot">${all.length} groups total</div><div class="lopen"><span class="blink"></span>${op} spots open</div></div>`;
+    const llLangs = ['Portuguese','Czech','Polish'];
+    const llBadge = llLangs.includes(lang) ? '<div class="ll-tag">🌍 Local Lingua project</div>' : '';
+    d.innerHTML=`<div class="lcard-bg">${FL[lang]}</div><div class="lf">${FL[lang]}</div><div class="ln">${lang}</div>${llBadge}<div class="lmeta"><div class="ltot">${all.length} groups total</div><div class="lopen"><span class="blink"></span>${op} spots open</div></div>`;
     d.onclick=()=>{document.querySelectorAll('.lcard').forEach(c=>c.classList.remove('sel'));d.classList.add('sel');S.lang=lang;S.level=null;setTimeout(()=>go(2),270)};
     g.appendChild(d);
   });
@@ -514,8 +525,8 @@ function rnd(data){
 const WAITLIST_HTML = `<div class="waitlist-block" style="margin-top:28px;">
   <div class="waitlist-icon">📋</div>
   <div class="waitlist-body">
-    <div class="waitlist-title">Didn't find a convenient group?</div>
-    <div class="waitlist-sub">Sign up for the waiting list and we'll get back to you when a suitable slot opens up.</div>
+    <div class="waitlist-title">Join the Waiting List</div>
+    <div class="waitlist-sub">No suitable group available right now? Join the waiting list — we'll reach out as soon as a spot opens up that matches your schedule and level.</div>
     <button class="waitlist-apply" onclick="openWaitlist()">✉️ Join the waiting list</button>
   </div>
 </div>`;
@@ -554,7 +565,7 @@ function crd(g){
   const f=full(g),pct=Math.min(100,Math.round(g.n/MAX*100));
   let c='c-lo';if(f)c='c-fu';else if(pct>=75)c='c-hi';else if(pct>=50)c='c-mi';
   const badge=f?`<div class="badge bf">🔒 Full</div>`:`<div class="badge bo"><span class="blink"></span>Open</div>`;
-  const note=g.note?`<div class="gnote">🔄 ${g.note}</div>`:'';
+  const note=g.note?`<div class="gnote">🔄 Course already in progress — ${g.note.replace("Ongoing since","started in")}</div>`:'';
   return`<div class="gc${f?' gf':''}"><div class="gc-stripe"></div><div class="gc-body">
     <div class="gc-r1"><div class="gc-id">${g.id}</div>${badge}</div>
     <div class="gc-teacher"><div class="av">${ini(g.teacher)}</div>${TURLS[g.teacher]?'<a href="'+TURLS[g.teacher]+'" target="_blank" rel="noopener">'+g.teacher+'</a>':g.teacher}</div>
@@ -595,13 +606,16 @@ function openWaitlist(){
     <div class="modal-info">
       <div class="modal-info-row">🌐 Language: <b>${S.lang||'Not selected'}</b></div>
     </div>
+    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#166534;line-height:1.6;">
+      ℹ️ After joining, we'll contact you when a suitable group opens up. Waiting time varies depending on demand. For questions, contact <strong>@Daria Kalinina</strong> via Slack.
+    </div>
     <div class="mform-group">
       <label class="mform-label">Your name</label>
       <input class="mform-input" id="mName" type="text" placeholder="First and last name" required>
     </div>
     <div class="mform-group">
       <label class="mform-label">Corporate email</label>
-      <input class="mform-input" id="mEmail" type="email" placeholder="name@autodoc.de" required>
+      <input class="mform-input" id="mEmail" type="email" placeholder="name@autodoc.eu" required>
     </div>
     <div class="mform-group">
       <label class="mform-label">Your current level</label>
@@ -615,14 +629,7 @@ function openWaitlist(){
         <button type="button" class="wt-chip" id="wt-evening" onclick="toggleTime(this)"><span>🌙</span> Evening</button>
       </div>
     </div>
-    <div class="mform-group">
-      <a href="https://confluence.autodoc.de/display/PEOP/Language+Request+Guide" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--red);text-decoration:none;margin-bottom:8px;border-bottom:1px dashed var(--red-mid);padding-bottom:1px;">
-        🎫 Create a Jira ticket to join!
-      </a>
-      <label class="mform-label">Jira ticket</label>
-      <input class="mform-input" id="mJira" type="text" placeholder="e.g. LR-1034" required>
-    </div>
-    <button class="modal-submit" onclick="submitForm('waitlist')">Send Waitlist Request →</button>
+    <button class="modal-submit" onclick="submitForm('waitlist')">Join Waiting List →</button>
   `;
   document.getElementById('applyModal').classList.add('open');
   document.body.style.overflow='hidden';
@@ -641,8 +648,8 @@ async function submitForm(type){
   const g = window._currentGroup || null;
   const name = document.getElementById('mName').value.trim();
   const email = document.getElementById('mEmail').value.trim();
-  const jira2 = (document.getElementById('mJira')||{}).value||'';
-  if(!name || !email || !jira2.trim()){ alert('Please fill in all required fields'); return; }
+  const jira2 = (document.getElementById('mJira')||{}).value||'N/A';
+  if(!name || !email){ alert('Please fill in all required fields'); return; }
   const btn = document.querySelector('.modal-submit');
   btn.disabled = true; btn.textContent = 'Sending…';
 
@@ -759,6 +766,18 @@ async function submitFeedback(){
   } catch(e){ btn.disabled=false; btn.textContent='Try again'; }
 }
 
+
+function copyGroup(btn, groupId){
+  navigator.clipboard.writeText(groupId).then(()=>{
+    btn.textContent = '✅ Copied!';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.innerHTML='📋 Copy group name';btn.classList.remove('copied');},2000);
+  }).catch(()=>{
+    btn.textContent = '❌ Try again';
+    setTimeout(()=>{btn.innerHTML='📋 Copy group name';},2000);
+  });
+}
+
 // Inject email via JS to prevent Cloudflare obfuscation
 (function(){
   var e='business.eng.academy'+'@'+'gmail.com';
@@ -778,7 +797,7 @@ async function submitFeedback(){
 
 <!-- FEEDBACK BUTTON -->
 <button class="fb-btn" onclick="openFeedback()">
-  <span>⭐</span> Leave feedback
+  <span>💡</span> Help Us Improve
 </button>
 
 <!-- FEEDBACK MODAL -->
