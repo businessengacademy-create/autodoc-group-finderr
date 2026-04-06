@@ -173,7 +173,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .c-hi{background:linear-gradient(90deg,var(--red),var(--red2))}
 .c-fu{background:var(--border2)}
 
-.gnote{display:inline-flex;align-items:center;gap:5px;margin-top:10px;background:#fffbeb;border:1px solid #fde68a;color:#92400e;font-size:11px;font-weight:500;padding:4px 10px;border-radius:6px}
+.gnote{display:flex;align-items:center;gap:8px;margin-top:10px;background:#fffbeb;border:1.5px solid #fde68a;color:#92400e;font-size:12px;font-weight:500;padding:10px 14px;border-radius:10px;width:100%;line-height:1.4}
 .gc-contact{display:flex;align-items:flex-start;gap:7px;margin-top:12px;padding:10px 12px;background:#f8f6ff;border:1px solid #e4dffa;border-radius:10px;font-size:11px;color:#5b4fa8;line-height:1.45}
 .gc-contact a{color:#5b4fa8;font-weight:600;text-decoration:none;white-space:nowrap}
 .gc-contact a:hover{text-decoration:underline}
@@ -288,13 +288,20 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .gc-copy{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:7px 14px;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;font-family:inherit;width:100%;justify-content:center}
 .gc-copy:hover{border-color:var(--red);color:var(--red);background:var(--red-soft)}
 .gc-copy.copied{border-color:var(--green);color:var(--green);background:#f0fdf4}
+
+.ll-notice{display:none;align-items:flex-start;gap:12px;margin-bottom:20px;padding:14px 18px;background:#f0fdf4;border:1.5px solid #86efac;border-left:4px solid #16a34a;border-radius:12px}
+.ll-notice-icon{font-size:20px;flex-shrink:0;line-height:1;margin-top:2px}
+.ll-notice-text{font-size:13px;color:#166534;line-height:1.6;font-weight:400}
+.ll-notice-text strong{color:#14532d}
+.ll-notice-text a{color:#16a34a;font-weight:600;text-decoration:none;border-bottom:1px dashed #86efac}
+.ll-notice-text a:hover{border-bottom-color:#16a34a}
 </style>
 </head>
 <body>
 
 <header class="topbar">
   <div class="logo-wrap">
-    <div class="logo">AUTODOC</div>
+    <div class="logo" onclick="go(1)" style="cursor:pointer;" title="Back to home">AUTODOC</div>
     <div class="tdiv"></div>
     <span class="tsub">Language Programs</span>
   </div>
@@ -329,6 +336,13 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <div class="crumb" id="bc2"></div>
     </div>
     <div class="slabel">Choose your level</div>
+    <div class="ll-notice" id="ll-notice">
+      <div class="ll-notice-icon">🌍</div>
+      <div class="ll-notice-text">
+        <strong>This is a Local Lingua project.</strong> Before booking a group, please review the project details and requirements.<br>
+        <a href="https://confluence.autodoc.de/pages/viewpage.action?pageId=567313360" target="_blank" rel="noopener">📄 Read about Local Lingua project ↗</a>
+      </div>
+    </div>
     <p class="lvl-hint">💡 Not sure about your level? Pick the closest to your current ability. <span id="test-link"></span></p>
     <div class="level-grid" id="level-grid"></div>
   </div>
@@ -450,8 +464,8 @@ const ini=n=>n.split(' ').map(w=>w[0]).slice(0,1).join('').toUpperCase();
     const all=DATA.filter(x=>x.lang===lang),op=all.filter(x=>!full(x)).length;
     const d=document.createElement('div');d.className='lcard';
     const llLangs = ['Portuguese','Czech','Polish'];
-    const llBadge = llLangs.includes(lang) ? '<a class="ll-tag" href="https://confluence.autodoc.de/pages/viewpage.action?pageId=567313360" target="_blank" rel="noopener">🌍 Local Lingua project ↗</a>' : '';
-    d.innerHTML=`<div class="lcard-bg">${FL[lang]}</div><div class="lf">${FL[lang]}</div><div class="ln">${lang}</div>${llBadge}<div class="lmeta"><div class="ltot">${all.length} groups total</div><div class="lopen"><span class="blink"></span>${op} spots open</div></div>`;
+    const llBadge = '';
+    d.innerHTML=`<div class="lcard-bg">${FL[lang]}</div><div class="lf">${FL[lang]}</div><div class="ln">${lang}</div><div class="lmeta"><div class="ltot">${all.length} groups total</div><div class="lopen"><span class="blink"></span>${op} spots open</div></div>`;
     d.onclick=()=>{document.querySelectorAll('.lcard').forEach(c=>c.classList.remove('sel'));d.classList.add('sel');S.lang=lang;S.level=null;setTimeout(()=>go(2),270)};
     g.appendChild(d);
   });
@@ -461,6 +475,9 @@ const ini=n=>n.split(' ').map(w=>w[0]).slice(0,1).join('').toUpperCase();
 function bldS2(){
   const f=DATA.filter(x=>x.lang===S.lang),levels=srtL([...new Set(f.map(x=>x.level))]);
   document.getElementById('bc2').innerHTML=`${FL[S.lang]} <b>${S.lang}</b>`;
+  const llNotice = document.getElementById('ll-notice');
+  const llLangsCheck = ['Portuguese','Czech','Polish'];
+  if(llNotice) llNotice.style.display = llLangsCheck.includes(S.lang) ? 'flex' : 'none';
   const tl=document.getElementById('test-link');
   if(tl){const url=TESTS[S.lang];tl.innerHTML=url?` · <a href="${url}" target="_blank" rel="noopener" style="color:var(--red);font-weight:600;text-decoration:none;border-bottom:1px dashed var(--red-mid);">Take a placement test ↗</a>`:''}
   const g=document.getElementById('level-grid');g.innerHTML='';
@@ -571,13 +588,14 @@ function crd(g){
     <div class="gc-teacher"><div class="av">${ini(g.teacher)}</div>${TURLS[g.teacher]?'<a href="'+TURLS[g.teacher]+'" target="_blank" rel="noopener">'+g.teacher+'</a>':g.teacher}</div>
     <div class="gc-info">
       <div class="ir"><div class="ic">📅</div><span>${g.s}</span></div>
-      <div class="ir"><div class="ic">🗓️</div><span>Started ${g.start}</span></div>
+
     </div>
     <div class="cap"><div class="cap-top"><span class="cap-l">Capacity</span><span class="cap-v">${g.n} / ${MAX}</span></div>
     <div class="bbt"><div class="bbf ${c}" style="width:${pct}%"></div></div></div>
     ${note}
-    <button class="gc-copy" onclick="copyGroup(this,'${g.id}')">📋 Copy group name</button>
-    <div class="gc-contact"><span class="gc-contact-icon">📝</span><span>Schedule works for you?<br>Copy the group name and <a href="https://confluence.autodoc.de/display/PEOP/Language+Request+Guide" target="_blank" rel="noopener">create a Jira ticket</a> — paste the group name into the description.</span></div>
+    ${!g.note ? '<div class="gnote">🗓️ Started '+g.start+'</div>' : ''}
+    ${!f ? '<button class="gc-copy" onclick="copyGroup(this,\''+g.id+'\')">📋 Copy group name</button>' : ''}
+    ${!f ? '<div class="gc-contact"><span class="gc-contact-icon">📝</span><span>Schedule works for you?<br>Copy the group name and <a href="https://confluence.autodoc.de/display/PEOP/Language+Request+Guide" target="_blank" rel="noopener">create a Jira ticket</a> — paste the group name into the description.</span></div>' : ''}
   </div></div>`;
 }
 
@@ -779,14 +797,24 @@ async function submitFeedback(){
 
 
 function copyGroup(btn, groupId){
-  navigator.clipboard.writeText(groupId).then(()=>{
-    btn.textContent = '✅ Copied!';
+  function onSuccess(){
+    btn.innerHTML='✅ Copied!';
     btn.classList.add('copied');
     setTimeout(()=>{btn.innerHTML='📋 Copy group name';btn.classList.remove('copied');},2000);
-  }).catch(()=>{
-    btn.textContent = '❌ Try again';
-    setTimeout(()=>{btn.innerHTML='📋 Copy group name';},2000);
-  });
+  }
+  function onFail(){
+    // fallback: create temp input
+    const el=document.createElement('textarea');
+    el.value=groupId;el.style.position='fixed';el.style.opacity='0';
+    document.body.appendChild(el);el.focus();el.select();
+    try{document.execCommand('copy');onSuccess();}catch(e){
+      btn.innerHTML='📋 '+groupId;
+    }
+    document.body.removeChild(el);
+  }
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(groupId).then(onSuccess).catch(onFail);
+  } else { onFail(); }
 }
 
 // Inject email via JS to prevent Cloudflare obfuscation
