@@ -285,9 +285,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .local-lingua-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;background:#f0fdf4;border:1px solid #86efac;color:#15803d;padding:3px 10px;border-radius:20px;margin-left:6px;vertical-align:middle}
 .ll-tag{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font-size:11px;color:#15803d;font-weight:600;text-decoration:none;background:#f0fdf4;border:1px solid #86efac;padding:3px 10px;border-radius:20px;transition:all .2s}.ll-tag:hover{background:#dcfce7;color:#166534}
 
-.gc-copy{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:7px 14px;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;font-family:inherit;width:100%;justify-content:center}
-.gc-copy:hover{border-color:var(--red);color:var(--red);background:var(--red-soft)}
-.gc-copy.copied{border-color:var(--green);color:var(--green);background:#f0fdf4}
+.gc-copy{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;background:var(--red);border:none;border-radius:8px;font-size:14px;cursor:pointer;transition:all .2s;font-family:inherit;flex-shrink:0;margin-left:8px;vertical-align:middle;color:#fff;box-shadow:0 2px 6px rgba(232,80,0,.3)}
+.gc-copy:hover{background:var(--red2);transform:scale(1.1);box-shadow:0 4px 10px rgba(232,80,0,.4)}
+.gc-copy.copied{background:var(--green);box-shadow:0 2px 6px rgba(22,163,74,.3)}
 
 .ll-notice{display:none;align-items:flex-start;gap:12px;margin-bottom:20px;padding:14px 18px;background:#f0fdf4;border:1.5px solid #86efac;border-left:4px solid #16a34a;border-radius:12px}
 .ll-notice-icon{font-size:20px;flex-shrink:0;line-height:1;margin-top:2px}
@@ -584,7 +584,7 @@ function crd(g){
   const badge=f?`<div class="badge bf">🔒 Full</div>`:`<div class="badge bo"><span class="blink"></span>Open</div>`;
   const note=g.note?`<div class="gnote">🔄 Course already in progress — ${g.note.replace("Ongoing since","started in")}</div>`:'';
   return`<div class="gc${f?' gf':''}"><div class="gc-stripe"></div><div class="gc-body">
-    <div class="gc-r1"><div class="gc-id">${g.id}</div>${badge}</div>
+    <div class="gc-r1"><div style="display:flex;align-items:center;gap:0""><div class="gc-id">${g.id}</div>${!f ? '<button class="gc-copy" onclick="copyGroup(this,\''+g.id+'\')" title="Copy group name"><svg width="14" height="14" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M16 1H4C2.9 1 2 1.9 2 3v14h2V3h12V1zm3 4H8C6.9 5 6 5.9 6 7v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14zM10 9h7v2h-7zm0 3h7v2h-7zm0 3h4v2h-4z"/></svg></button>' : ''}</div>${badge}</div>
     <div class="gc-teacher"><div class="av">${ini(g.teacher)}</div>${TURLS[g.teacher]?'<a href="'+TURLS[g.teacher]+'" target="_blank" rel="noopener">'+g.teacher+'</a>':g.teacher}</div>
     <div class="gc-info">
       <div class="ir"><div class="ic">📅</div><span>${g.s}</span></div>
@@ -594,7 +594,6 @@ function crd(g){
     <div class="bbt"><div class="bbf ${c}" style="width:${pct}%"></div></div></div>
     ${note}
     ${!g.note ? '<div class="gnote">🗓️ Started '+g.start+'</div>' : ''}
-    ${!f ? '<button class="gc-copy" onclick="copyGroup(this,\''+g.id+'\')">📋 Copy group name</button>' : ''}
     ${!f ? '<div class="gc-contact"><span class="gc-contact-icon">📝</span><span>Schedule works for you?<br>Copy the group name and <a href="https://confluence.autodoc.de/display/PEOP/Language+Request+Guide" target="_blank" rel="noopener">create a Jira ticket</a> — paste the group name into the description.</span></div>' : ''}
   </div></div>`;
 }
@@ -798,9 +797,9 @@ async function submitFeedback(){
 
 function copyGroup(btn, groupId){
   function onSuccess(){
-    btn.innerHTML='✅ Copied!';
+    btn.innerHTML='✓';
     btn.classList.add('copied');
-    setTimeout(()=>{btn.innerHTML='📋 Copy group name';btn.classList.remove('copied');},2000);
+    setTimeout(()=>{btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2v-2"/><rect x="8" y="2" width="10" height="14" rx="2"/><line x1="11" y1="8" x2="15" y2="8"/><line x1="11" y1="11" x2="15" y2="11"/><line x1="11" y1="14" x2="15" y2="14"/></svg>';btn.classList.remove('copied');},2000);
   }
   function onFail(){
     // fallback: create temp input
