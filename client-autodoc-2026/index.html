@@ -623,14 +623,10 @@ function openWaitlist(){
     </div>
     <div class="mform-group">
       <label class="mform-label">Language</label>
-      <select class="mform-input" id="mLangSelect" required>
-        <option value="">Select language</option>
-        <option value="English">🇬🇧 English</option>
-        <option value="German">🇩🇪 German</option>
-        <option value="Portuguese">🇵🇹 Portuguese</option>
-        <option value="Czech">🇨🇿 Czech</option>
-        <option value="Polish">🇵🇱 Polish</option>
-      </select>
+      ${S.lang
+        ? '<div class="mform-input" style="background:var(--bg3);color:var(--text);cursor:default;display:flex;align-items:center;gap:8px;font-weight:600;">' + ({"English":"🇬🇧","German":"🇩🇪","Portuguese":"🇵🇹","Czech":"🇨🇿","Polish":"🇵🇱"}[S.lang]||"🌐") + " " + S.lang + '<input type="hidden" id="mLangSelect" value="' + S.lang + '"></div>'
+        : '<select class="mform-input" id="mLangSelect" required><option value="">Select language</option><option value="English">🇬🇧 English</option><option value="German">🇩🇪 German</option><option value="Portuguese">🇵🇹 Portuguese</option><option value="Czech">🇨🇿 Czech</option><option value="Polish">🇵🇱 Polish</option></select>'
+      }
     </div>
     <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#166534;line-height:1.6;">
       ℹ️ After joining, we'll contact you when a suitable group opens up. Waiting time varies depending on demand. For questions, contact <strong>@Daria Kalinina</strong> via Slack.
@@ -659,6 +655,7 @@ function openWaitlist(){
   `;
   document.getElementById('applyModal').classList.add('open');
   document.body.style.overflow='hidden';
+
 }
 
 function toggleTime(btn){
