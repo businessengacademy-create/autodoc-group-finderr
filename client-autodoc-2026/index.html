@@ -395,6 +395,12 @@ if (_params.get('key') !== SECRET_KEY) {
   });
 }
 // ─────────────────────────────────────────────────────────────────────────────
+
+// ── POSTHOG TRACKING ─────────────────────────────────────────────────────────
+function ph(event, props){
+  try{ if(window.posthog) posthog.capture(event, props || {}); }catch(e){}
+}
+// ─────────────────────────────────────────────────────────────────────────────
 const DATA=[
   // ── English ────────────────────────────────────────────────────────────────
   {id:"Group 6",              lang:"English",teacher:"Alena Sikorskaya",      s:"Tue, Thu  08:00–09:00 (Kyiv time)", level:"Upper-Intermediate",start:"12.01.26",n:5},
