@@ -594,7 +594,7 @@ function crd(g){
   const badge=f?`<div class="badge bf">🔒 Full</div>`:`<div class="badge bo"><span class="blink"></span>Open</div>`;
   const note=g.note?`<div class="gnote">🔄 Course already in progress — ${g.note.replace("Ongoing since","started in")}</div>`:'';
   return`<div class="gc${f?' gf':''}"><div class="gc-stripe"></div><div class="gc-body">
-    <div class="gc-r1"><div style="display:flex;align-items:center;gap:0""><div class="gc-id">${g.id}</div>${!f ? '<button class="gc-copy" onclick="copyGroup(this,\''+g.id+'\')" title="Copy group name">&#128203;</button>' : ''}</div>${badge}</div>
+    <div class="gc-r1"><div style="display:flex;align-items:center;gap:0"><div class="gc-id">${g.id}</div>${!f ? '<button class="gc-copy" onclick="copyGroup(this,\''+g.id+'\')" title="Copy group name">&#128203;</button>' : ''}</div>${badge}</div>
     <div class="gc-teacher"><div class="av">${ini(g.teacher)}</div>${TURLS[g.teacher]?'<a href="'+TURLS[g.teacher]+'" target="_blank" rel="noopener">'+g.teacher+'</a>':g.teacher}</div>
     <div class="gc-info">
       <div class="ir"><div class="ic">📅</div><span>${g.s}</span></div>
